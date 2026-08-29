@@ -85,6 +85,7 @@
 		BF34FA071CF0F510006624C7 /* EditCheatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF34FA061CF0F510006624C7 /* EditCheatViewController.swift */; };
 		BF34FA111CF1899D006624C7 /* CheatTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF34FA101CF1899D006624C7 /* CheatTextView.swift */; };
 		BF353FF21C5D7FB000C1184C /* PauseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF353FF11C5D7FB000C1184C /* PauseViewController.swift */; };
+		99A100022F565D8000F5B5C0 /* WirelessConnectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A100012F565D8000F5B5C0 /* WirelessConnectorView.swift */; };
 		BF353FF61C5D837600C1184C /* PauseMenu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF353FF41C5D837600C1184C /* PauseMenu.storyboard */; };
 		BF353FF91C5D870B00C1184C /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF353FF81C5D870B00C1184C /* MenuItem.swift */; };
 		BF353FFF1C5DA3C500C1184C /* PausePresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF353FFD1C5DA3C500C1184C /* PausePresentationController.swift */; };
@@ -655,6 +656,7 @@
 		BF34FA061CF0F510006624C7 /* EditCheatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCheatViewController.swift; sourceTree = "<group>"; };
 		BF34FA101CF1899D006624C7 /* CheatTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheatTextView.swift; sourceTree = "<group>"; };
 		BF353FF11C5D7FB000C1184C /* PauseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PauseViewController.swift; sourceTree = "<group>"; };
+		99A100012F565D8000F5B5C0 /* WirelessConnectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WirelessConnectorView.swift; sourceTree = "<group>"; };
 		BF353FF51C5D837600C1184C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PauseMenu.storyboard; sourceTree = "<group>"; };
 		BF353FF81C5D870B00C1184C /* MenuItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
 		BF353FFD1C5DA3C500C1184C /* PausePresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PausePresentationController.swift; sourceTree = "<group>"; };
@@ -1318,9 +1320,18 @@
 				BF3540031C5DA6D800C1184C /* Save States */,
 				BFC9B7371CEFCD08008629BB /* Cheats */,
 				BF353FFB1C5DA2F600C1184C /* Presentation Controller */,
+				99A100032F565D8000F5B5C0 /* Wireless */,
 				BF912E481C5CB5D50041527C /* Segues */,
 			);
 			path = "Pause Menu";
+			sourceTree = "<group>";
+		};
+		99A100032F565D8000F5B5C0 /* Wireless */ = {
+			isa = PBXGroup;
+			children = (
+				99A100012F565D8000F5B5C0 /* WirelessConnectorView.swift */,
+			);
+			path = Wireless;
 			sourceTree = "<group>";
 		};
 		BF912E481C5CB5D50041527C /* Segues */ = {
@@ -2701,6 +2712,7 @@
 				D5AE78832BEAAD6100ED25DC /* GameSceneDelegate.swift in Sources */,
 				D53EF0D42D78E23F005C948A /* AchievementsTracker.swift in Sources */,
 				BF353FF21C5D7FB000C1184C /* PauseViewController.swift in Sources */,
+				99A100022F565D8000F5B5C0 /* WirelessConnectorView.swift in Sources */,
 				BF00BEA625B758AA00C8607D /* SystemBIOS.swift in Sources */,
 				BF696B801D9B2B02009639E0 /* Theme.swift in Sources */,
 				D59B50B72C06666A00FDC53A /* Delta7ToDelta8.xcmappingmodel in Sources */,
