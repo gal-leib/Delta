@@ -30,28 +30,33 @@ struct WirelessConnectorView: View {
     @ObservedObject private var manager = GBAWirelessManager.shared
     var dismissAction: (() -> Void)?
     
+    @SwiftUI.State private var showAdvancedSettings: Bool = false
+    @SwiftUI.State private var copiedToClipboard: Bool = false
+    
     var body: some View {
         Form {
-            Section(header: Text("Cloudflare Relay")) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Relay Server")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    TextField("Server URL", text: $manager.serverURL)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .disabled(manager.state != .disconnected && !isErrorState)
-                }
-                
+            Section(header: Text("Room Connection"), footer: Text("Both players simply enter the same Room Code and tap Connect. Roles and sessions are negotiated automatically.")) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Room Code")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     HStack {
-                        TextField("Room Code", text: $manager.roomCode)
+                        TextField("e.g. trade-abc123", text: $manager.roomCode)
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
                             .disabled(manager.state != .disconnected && !isErrorState)
+                        
+                        Button(action: {
+                            UIPasteboard.general.string = manager.roomCode
+                            copiedToClipboard = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                copiedToClipboard = false
+                            }
+                        }) {
+                            Image(systemName: copiedToClipboard ? "checkmark" : "doc.on.doc")
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(Color(uiColor: .deltaPurple))
                         
                         Button("Random") {
                             manager.roomCode = GBAWirelessManager.generateRandomRoomCode()
@@ -61,32 +66,38 @@ struct WirelessConnectorView: View {
                         .disabled(manager.state != .disconnected && !isErrorState)
                     }
                 }
-                
-                Picker("Role", selection: $manager.role) {
-                    ForEach(GBAWirelessManager.Role.allCases) { role in
-                        Text(role.rawValue).tag(role)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .disabled(manager.state != .disconnected && !isErrorState)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Room Token (Optional)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    SecureField("Token", text: $manager.roomToken)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .disabled(manager.state != .disconnected && !isErrorState)
-                }
             }
             
             Section(header: Text("Connection Status")) {
-                HStack {
+                HStack(spacing: 12) {
                     statusIndicator
                     Text(manager.state.description)
                         .font(.subheadline)
                         .foregroundColor(statusTextColor)
+                }
+                .padding(.vertical, 2)
+                
+                if manager.state.isConnected || manager.peerCount > 0 {
+                    HStack {
+                        Text("Room Presence")
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        Text("\(manager.peerCount)/2 Players")
+                            .font(.footnote)
+                            .bold()
+                            .foregroundColor(manager.peerCount >= 2 ? .green : .orange)
+                    }
+                    
+                    if let role = manager.assignedRole {
+                        HStack {
+                            Text("Assigned Role")
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            Text(role.capitalized)
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                        }
+                    }
                 }
                 
                 HStack {
@@ -134,6 +145,37 @@ struct WirelessConnectorView: View {
                     }
                 }
             }
+            
+            Section(header: HStack {
+                Text("Advanced Settings")
+                Spacer()
+                Button(showAdvancedSettings ? "Hide" : "Show") {
+                    showAdvancedSettings.toggle()
+                }
+                .font(.caption)
+            }) {
+                if showAdvancedSettings {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Relay Server URL")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        TextField("Server URL", text: $manager.serverURL)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .disabled(manager.state != .disconnected && !isErrorState)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Room Token (Optional)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        SecureField("Token", text: $manager.roomToken)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .disabled(manager.state != .disconnected && !isErrorState)
+                    }
+                }
+            }
         }
         .navigationTitle(Text("Wireless Adapter"))
         .navigationBarTitleDisplayMode(.inline)
@@ -149,8 +191,10 @@ struct WirelessConnectorView: View {
         switch manager.state {
         case .disconnected:
             Circle().fill(Color.gray).frame(width: 10, height: 10)
-        case .connecting, .hostListening, .joinerProbing:
+        case .connecting:
             ProgressView().scaleEffect(0.7)
+        case .waitingForPartner:
+            Circle().fill(Color.blue).frame(width: 10, height: 10)
         case .connected:
             Circle().fill(Color.green).frame(width: 10, height: 10)
         case .error:
@@ -162,9 +206,11 @@ struct WirelessConnectorView: View {
         switch manager.state {
         case .connected:
             return .green
+        case .waitingForPartner:
+            return .blue
         case .error:
             return .red
-        case .connecting, .hostListening, .joinerProbing:
+        case .connecting:
             return .orange
         case .disconnected:
             return .primary
