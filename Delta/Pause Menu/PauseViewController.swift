@@ -20,7 +20,7 @@ class PauseViewController: UIViewController, PauseInfoProviding
     }
     
     var pauseItems: [MenuItem] {
-        return [self.saveStateItem, self.loadStateItem, self.cheatCodesItem, self.wirelessAdapterItem, self.fastForwardItem, self.sustainButtonsItem, self.screenshotItem, self.askLuItem].compactMap { $0 }
+        return [self.saveStateItem, self.loadStateItem, self.cheatCodesItem, self.fastForwardItem, self.sustainButtonsItem, self.screenshotItem, self.askLuItem].compactMap { $0 }
     }
     
     var closeButtonTitle: String = NSLocalizedString("Main Menu", comment: "")
@@ -40,7 +40,6 @@ class PauseViewController: UIViewController, PauseInfoProviding
     var saveStateItem: MenuItem?
     var loadStateItem: MenuItem?
     var cheatCodesItem: MenuItem?
-    var wirelessAdapterItem: MenuItem?
     var fastForwardItem: MenuItem?
     var sustainButtonsItem: MenuItem?
     var screenshotItem: MenuItem?
@@ -240,21 +239,8 @@ private extension PauseViewController
         self.sustainButtonsItem = nil
         self.fastForwardItem = nil
         self.screenshotItem = nil
-        self.wirelessAdapterItem = nil
         
         guard let emulatorCore = self.emulatorCore else { return }
-        
-        if emulatorCore.game.type == .gba
-        {
-            let wirelessImage = UIImage(systemName: "antenna.radiowaves.left.and.right") ?? UIImage()
-            self.wirelessAdapterItem = MenuItem(text: NSLocalizedString("Wireless Link", comment: ""), image: wirelessImage, action: { [unowned self] item in
-                if #available(iOS 26.0, *) {
-                    item.isSelected = false
-                }
-                let hostingController = WirelessConnectorView.HostingController()
-                self.pauseNavigationController?.pushViewController(hostingController, animated: true)
-            })
-        }
         
         self.saveStateItem = MenuItem(text: NSLocalizedString("Save State", comment: ""), image: #imageLiteral(resourceName: "SaveSaveState"), action: { [unowned self] item in
             self.saveStatesViewControllerMode = .saving
