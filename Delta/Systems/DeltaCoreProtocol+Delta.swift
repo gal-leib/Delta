@@ -111,10 +111,11 @@ extension DeltaCoreProtocol
                                       .version: .init(value: NSLocalizedString("1.63", comment: ""), url: URL(string: "https://github.com/snes9xgit/snes9x/releases/tag/1.63")),
                                       .source: .init(value: NSLocalizedString("GitHub", comment: ""), url: URL(string: "https://github.com/snes9xgit/snes9x"))])
         case GBA.core:
-            return DeltaCoreMetadata([.name: .init(value: NSLocalizedString("VisualBoyAdvance-M", comment: ""), url: URL(string: "https://visualboyadvance-m.org")),
-                                      .developer: .init(value: NSLocalizedString("VBA-M Team", comment: "")),
-                                      .version: .init(value: NSLocalizedString("2.2.2", comment: ""), url: URL(string: "https://github.com/visualboyadvance-m/visualboyadvance-m/releases/tag/v2.2.2")),
-                                      .source: .init(value: NSLocalizedString("GitHub", comment: ""), url: URL(string: "https://github.com/visualboyadvance-m/visualboyadvance-m"))])
+            return DeltaCoreMetadata([.name: .init(value: NSLocalizedString("mGBA", comment: ""), url: URL(string: "https://mgba.io")),
+                                      .developer: .init(value: NSLocalizedString("Jeffrey Pfau (endrift)", comment: ""), url: URL(string: "https://github.com/endrift")),
+                                      .version: .init(value: NSLocalizedString("0.11", comment: ""), url: URL(string: "https://github.com/mgba-emu/mgba/releases")),
+                                      .source: .init(value: NSLocalizedString("GitHub", comment: ""), url: URL(string: "https://github.com/gal-leib/mgba")),
+                                      .donate: .init(value: NSLocalizedString("Patreon", comment: ""), url: URL(string: "https://www.patreon.com/mgba"))])
         case N64.core:
             return DeltaCoreMetadata([.name: .init(value: NSLocalizedString("Mupen64Plus", comment: ""), url: URL(string: "https://mupen64plus.org")),
                                       .developer: .init(value: NSLocalizedString("Richard Goedeken", comment: ""), url: URL(string: "https://github.com/richard42")),
