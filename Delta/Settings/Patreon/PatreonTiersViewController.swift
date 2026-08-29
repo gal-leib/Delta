@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import StoreKit
 
 @available(iOS 17.5, *)
 private extension RevenueCatManager.Subscription
@@ -185,18 +184,9 @@ private extension PatreonTiersViewController
     
     @objc func manageSubscription()
     {
-        guard let windowScene = self.view.window?.windowScene else { return }
-        
-        Task<Void, Never> {
-            do
-            {
-                try await AppStore.showManageSubscriptions(in: windowScene, subscriptionGroupID: PurchaseManager.friendZoneSubscriptionGroupID)
-            }
-            catch
-            {
-                let alertController = UIAlertController(title: String(localized: "Unable to Manage Subscription"), error: error)
-                self.present(alertController, animated: true)
-            }
+        if let url = URL(string: "https://www.patreon.com/rileytestut")
+        {
+            UIApplication.shared.open(url)
         }
     }
     

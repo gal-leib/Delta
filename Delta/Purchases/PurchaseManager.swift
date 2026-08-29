@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StoreKit
 import DeltaFeatures
 
 extension PurchaseManager
@@ -20,8 +19,7 @@ class PurchaseManager
     static let shared = PurchaseManager()
     
     var supportsExternalPurchases: Bool {
-        guard !UserDefaults.standard.isExternalPurchaseLinkDisabled else { return false }
-        return _supportsExternalPurchases
+        return false
     }
     private var _supportsExternalPurchases: Bool = false
     
@@ -29,31 +27,10 @@ class PurchaseManager
     {
     }
     
-    @available(iOS 17.5, *) // iOS 17.5 is earliest version that supports reporting purchases via Apple's External Purchase Server API.
+    @available(iOS 17.5, *)
     func prepare() async
     {
-        #if APP_STORE
-        
-        if let storeCountryCode = await Storefront.current?.countryCode, storeCountryCode == "USA"
-        {
-            self._supportsExternalPurchases = true
-            
-            do
-            {
-                try await RevenueCatManager.shared.start()
-            }
-            catch
-            {
-                Logger.purchases.error("Failed to refresh RevenueCat customer info at launch. \(error.localizedDescription, privacy: .public)")
-            }
-        }
-        
-        #else
-        
-        // Delta always supports external purchases outside App Store.
-        self._supportsExternalPurchases = true
-        
-        #endif
+        self._supportsExternalPurchases = false
     }
     
     @MainActor // @MainActor because some observers expect changes to happen on main thread.
